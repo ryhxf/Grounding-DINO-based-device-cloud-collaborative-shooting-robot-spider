@@ -2,6 +2,8 @@
 
 代码都放在[release](https://github.com/ryhxf/Grounding-DINO-based-device-cloud-collaborative-shooting-robot-spider/releases/tag/v1.0)
 
+📋 **当前使用的模型信息请查看：[MODEL_INFO.md](MODEL_INFO.md)**
+
 # 基于多模态融合的端云协同军事射击机器人
 
 ![image](https://github.com/user-attachments/assets/90377063-cfa7-491c-842c-ccc0a36b71c6)
@@ -31,11 +33,21 @@
 嵌入式端用的开发板分别是树莓派4B、RDK-X5、GD32F303。六足机体用的是幻尔科技家的Spider，它上面自带了树莓派4B作为主控制器，把运动控制的任务分离出来了，就像是人体“小脑”一样。这倒是减轻了RDK-X5的负担。RDK-X5的任务就比较多了，更像是大脑，上通过HTTP网络与云服务器进行通信，实际用的是UDP协议。下还需要与树莓派和GD32完成控制机体，指挥射击等操作。跟踪射击部分用的是GD32单片机完成控制，与RDK-X5使用串口通信，为了接线方便，直接用了USB模拟串口，32这边就用了先进的Type-C接口，32的控制功能主要是通过高低电平控制枪完成射击，通过PWM波控制两个舵机，实现自动跟踪。
 
 ### Grounding DINO模型介绍
+**当前使用模型：Grounding DINO with SwinT-OGC**
+
 这个模型的内在核心原理，我就不仔细介绍了，毕竟在这个项目里只需要把它当成一个模块，做到怎么用，怎么调参就行了。
 
 ![image](https://github.com/user-attachments/assets/5861fbe8-f05f-4f18-9a93-9a7ccb89e6bd)
 
 如上图，将文本关键词白色丝袜和对应图像输入Grounding DINO检测模型，最后直接会输出检测信息，包括检测框的大小、位置、置信度等参数。
+
+**模型详细信息：**
+- 模型配置：GroundingDINO_SwinT_OGC.py
+- 预训练权重：groundingdino_swint_ogc.pth (~690MB)
+- 骨干网络：Swin Transformer (SwinT)
+- 检测速度：单640*480图像最快200ms (4080 Super GPU)
+- 文本编码器：BERT-base-uncased
+
 不过，该模型的输入文本关键词固定为英文，为了因此代码中还部署了自动检测中英文和离线翻译模型，使用时输入中文时，会自动翻译成英文输入模型。
 
 ### 端云协同机制下“大检测-小检测-跟踪”三级级联框架
@@ -193,6 +205,8 @@ https://github.com/IDEA-Research/GroundingDINO
 ```pip install pillow```
 
 ## 代码结构
+**当前使用模型配置：Grounding DINO with SwinT-OGC**
+
 服务器的工程文件是直接在Grounding DINO的工程基础上进行开发，因此主要详细展示增加的开发部分，其余部分有很多废案并未删除。
 
 服务器端
@@ -203,7 +217,8 @@ GroundingDINO/                                    # GroundingDINO主项目根目
 │   ├── version.py                               # 版本信息
 │   ├── config/                                  # 模型配置文件目录
 │   │   ├── __init__.py                          
-│   │   ├── GroundingDINO_SwinT_OGC.py          # SwinT-OGC模型配置
+│   │   ├── GroundingDINO_SwinT_OGC.py          # SwinT-OGC模型配置（当前使用）
+│   │   └── GroundingDINO_SwinB_cfg.py          # SwinB模型配置（可选配置）
 │   │   └── GroundingDINO_SwinB_cfg.py          # SwinB模型配置
 │   ├── util/                                    # 工具函数模块
 │   │   ├── __init__.py
@@ -251,10 +266,10 @@ GroundingDINO/                                    # GroundingDINO主项目根目
 │                   └── ms_deform_im2col_cuda.cuh
 │
 ├── weights/                                      # 预训练模型权重目录
-│   └── groundingdino_swint_ogc.pth              # SwinT-OGC预训练权重（约690MB）
+│   └── groundingdino_swint_ogc.pth              # SwinT-OGC预训练权重（约690MB）- 当前使用
 │
 ├── local_models/                                 # 下载好的模型权重文件
-│   └── bert-base-uncased/                       # BERT本地模型
+│   └── bert-base-uncased/                       # BERT本地模型 - 当前使用
 │       ├── config.json                          # BERT配置文件
 │       ├── pytorch_model.bin                    # BERT模型权重
 │       ├── tokenizer.json                       # 分词器配置
@@ -280,7 +295,7 @@ GroundingDINO/                                    # GroundingDINO主项目根目
 │
 │
 ├── offline-zh-en-model/                        # 离线中英翻译模型（本人增加部分）
-│   └── zh-en-model/                            # 中英翻译模型文件
+│   └── zh-en-model/                            # 中英翻译模型文件 - 当前使用
 │       ├── config.json                         # 模型配置
 │       ├── generation_config.json             # 生成配置
 │       ├── tokenizer_config.json              # 分词器配置

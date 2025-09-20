@@ -2,6 +2,8 @@
 
 The code is all placed here [release](https://github.com/ryhxf/Grounding-DINO-based-device-cloud-collaborative-shooting-robot-spider/releases/tag/v1.0)
 
+📋 **For current model information, see: [MODEL_INFO.md](MODEL_INFO.md)**
+
 # End-cloud collaborative military shooting robot based on multi-modal fusion
 
 ![image](https://github.com/user-attachments/assets/90377063-cfa7-491c-842c-ccc0a36b71c6)
@@ -161,6 +163,8 @@ The following are some additional installation instructions, which may not be co
 ```pip install pillow```
 
 ## Code structure
+**Current Model Configuration: Grounding DINO with SwinT-OGC**
+
 The server project files are developed directly based on the Grounding DINO project, so the added development parts are mainly shown in detail, and there are many abandoned projects in the rest that have not been deleted.
 
 Server Side
@@ -171,8 +175,8 @@ GroundingDINO/                                    # GroundingDINO main project r
 │   ├── version.py                               # Version Information
 │   ├── config/                                  # Model configuration file directory
 │   │   ├── __init__.py                          
-│   │   ├── GroundingDINO_SwinT_OGC.py          # SwinT-OGC model configuration
-│   │   └── GroundingDINO_SwinB_cfg.py          # SwinB model configuration
+│   │   ├── GroundingDINO_SwinT_OGC.py          # SwinT-OGC model configuration (CURRENTLY USED)
+│   │   └── GroundingDINO_SwinB_cfg.py          # SwinB model configuration (alternative)
 │   ├── util/                                    # Tool function module
 │   │   ├── __init__.py
 │   │   ├── inference.py                        # Inference core functions (load_model, predict, annotate)
@@ -219,10 +223,10 @@ GroundingDINO/                                    # GroundingDINO main project r
 │                   └── ms_deform_im2col_cuda.cuh
 │
 ├── weights/                                      # Pre-trained model weights directory
-│   └── groundingdino_swint_ogc.pth              # SwinT-OGC pre-trained weights (about 690MB)
+│   └── groundingdino_swint_ogc.pth              # SwinT-OGC pre-trained weights (about 690MB) - CURRENTLY USED
 │
 ├── local_models/                                 # Model weight files
-│   └── bert-base-uncased/                        # BERT local model
+│   └── bert-base-uncased/                        # BERT local model - CURRENTLY USED
 │       ├── config.json                           # BERT configuration file
 │       ├── pytorch_model.bin                     # BERT model weights
 │       ├── tokenizer.json                        # Tokenizer configuration
@@ -248,7 +252,7 @@ GroundingDINO/                                    # GroundingDINO main project r
 │
 │
 ├── offline-zh-en-model/                          # Offline Chinese-English translation model (custom added)
-│   └── zh-en-model/                              # Translation model files
+│   └── zh-en-model/                              # Translation model files - CURRENTLY USED
 │       ├── config.json                           # Model configuration
 │       ├── generation_config.json                # Generation configuration
 │       ├── tokenizer_config.json                 # Tokenizer configuration
